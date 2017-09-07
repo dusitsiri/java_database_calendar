@@ -22,6 +22,7 @@
             <Button layoutX="88.0" layoutY="389.0" mnemonicParsing="false" onAction="#handleShowData" prefHeight="40.0" prefWidth="188.0" text="Show Information" />
             <Button layoutX="288.0" layoutY="389.0" mnemonicParsing="false" onAction="#handleClearButton" prefHeight="40.0" prefWidth="94.0" text="Clear" />
             <Label fx:id="notice" layoutX="156.0" layoutY="453.0" text="Please choose date and insert your event" />
+            <Button layoutX="490.0" layoutY="389.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="94.0" text="Test" />
          </children></Pane>
    </children>
    <rowConstraints>
