@@ -16,8 +16,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 
@@ -29,7 +29,6 @@ public class CalendarController implements Initializable {
 
     ArrayList<String> array = new ArrayList<>();
     @FXML TableView<Calendar> tableView;
-    @FXML private TextField deleteID;
 
 
     //choose date of event
@@ -69,7 +68,7 @@ public class CalendarController implements Initializable {
             AlertDaily daily = new AlertDaily();
             daily.submit(array, valuemenu, massage);
             notice.setText("Your data is "+array.get(0)+" "+massage+" "+valuemenu);
-            this.goToCalendar(event);
+            this.handleGoToCalendar(event);
             array.clear();
         }
     }
@@ -101,46 +100,46 @@ public class CalendarController implements Initializable {
 
     //delete event
     public void deleteData(ActionEvent event) throws IOException {
-        if (deleteID.getText().contains(",") || deleteID.getText().contains("-")) {
-            String[] newdeleteId = new String[0];
-            if (deleteID.getText().contains(",")) {
-                newdeleteId = deleteID.getText().split(",");
-                for (String i : newdeleteId) {
-                    int del = Integer.parseInt(i);
-                    loads.deleteDB(del);
-                }
-                this.goToCalendar(event);
+        if (tableView.getSelectionModel().getSelectedItem().getDate() != null){
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Do you want to delete " + tableView.getSelectionModel().getSelectedItem().getId() + "?",
+                    ButtonType.OK, ButtonType.CANCEL);
+            Optional optional = alert.showAndWait();
+            if (optional.get() == ButtonType.OK){
+                loads.deleteDB(tableView.getSelectionModel().getSelectedItem().getId());
+                this.handleGoToCalendar(event);
             }
-//            else if (deleteID.getText().contains("-")){
-//                newdeleteId = deleteID.getText().split("-");
-//                for (int i = 0; i < Integer.parseInt(newdeleteId[newdeleteId.length-1]); i++){
-//                   loads.deleteDB(Integer.parseInt(newdeleteId[i]));
-//                }
-//            }
-        } else if (deleteID.getText().length() == 1) {
-            int del = Integer.parseInt(deleteID.getText());
-            loads.deleteDB(del);
-            this.goToCalendar(event);
         }
-    }
 
+    }
 
     //clear event
     @FXML
-    private void cleartable(ActionEvent event) throws IOException {
-        loads.cleartableDB();
-        this.goToCalendar(event);
+    private void handleClearTable(ActionEvent event) throws IOException {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Do you want to delete all events?",
+                ButtonType.OK, ButtonType.CANCEL);
+        Optional optional = alert.showAndWait();
+        if (optional.get() == ButtonType.OK){
+            loads.cleartableDB();
+        }
+        this.handleGoToCalendar(event);
     }
 
     //refresh calendar
-    public void goToCalendar(ActionEvent event) throws IOException{
-        Button showdata = (Button) event.getSource();
-        Stage stage = (Stage) showdata.getScene().getWindow();
+    public void handleGoToCalendar(ActionEvent event) throws IOException{
+        Button button = (Button) event.getSource();
+        Stage stage = (Stage) button.getScene().getWindow();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../calendar.fxml"));
-        stage.setScene(new Scene(loader.load(), 900, 700));
+        stage.setScene(new Scene(loader.load(), 1350, 850));
         stage.show();
     }
 
 
+    public void handleSearchYourEvent(ActionEvent event) throws IOException{
+        Button button = (Button) event.getSource();
+        Stage stage = (Stage) button.getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../allevents.fxml"));
+        stage.setScene(new Scene(loader.load(), 1350, 850));
+        stage.show();
+    }
 
 }
