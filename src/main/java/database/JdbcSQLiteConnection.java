@@ -1,12 +1,12 @@
-/**
+package database; /**
  * Created by 708 on 9/1/2017.
  */
 
+import calender.Calendar;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.sql.*;
-import java.util.ArrayList;
 
 public class JdbcSQLiteConnection {
 

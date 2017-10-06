@@ -9,7 +9,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("calendar.fxml"));
-        primaryStage.setTitle("Calendar Events");
+        primaryStage.setTitle("calender.Calendar Events");
         primaryStage.setScene(new Scene(root, 900, 700));
         primaryStage.show();
     }

@@ -1,9 +1,10 @@
+package calender;
 
 public class Calendar{
 
-    private int id;
-    private String date;
-    private String events;
+    private int id = 0;
+    private String date = "";
+    private String events = "";
 
 
     public Calendar(int id, String date, String events) {
