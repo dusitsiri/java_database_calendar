@@ -22,12 +22,19 @@ import java.util.ResourceBundle;
 
 
 public class CalendarController implements Initializable {
-    ArrayList<String> array = new ArrayList<>();
 
-    //choose date
+    JdbcSQLiteConnection loads = new JdbcSQLiteConnection();
+    ObservableList<Calendar> lists = loads.loadDB();
+    ObservableList<Calendar> data = FXCollections.observableArrayList();
+
+    ArrayList<String> array = new ArrayList<>();
+    @FXML TableView<Calendar> tableView;
+    @FXML private TextField deleteID;
+
+
+    //choose date of event
     @FXML
     private DatePicker datePicker;
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         datePicker.setOnAction((ActionEvent event) -> {
@@ -48,7 +55,6 @@ public class CalendarController implements Initializable {
     @FXML
     private Label notice;
 
-    @FXML
     public void handleSubmit(ActionEvent event) throws IOException {
         if (array.isEmpty() && massage.getText().isEmpty()) {
             notice.setText("Please insert your information");
@@ -68,7 +74,7 @@ public class CalendarController implements Initializable {
         }
     }
 
-    //MenuButton
+    //choose alert
     @FXML
     private MenuButton menuButton;
     @FXML
@@ -93,14 +99,7 @@ public class CalendarController implements Initializable {
         }
     }
 
-
-    @FXML TableView<Calendar> tableView;
-    JdbcSQLiteConnection loads = new JdbcSQLiteConnection();
-    ObservableList<Calendar> lists = loads.loadDB();
-    ObservableList<Calendar> data = FXCollections.observableArrayList();
-    @FXML private TextField deleteID;
-
-    @FXML
+    //delete event
     public void deleteData(ActionEvent event) throws IOException {
         if (deleteID.getText().contains(",") || deleteID.getText().contains("-")) {
             String[] newdeleteId = new String[0];
@@ -126,7 +125,7 @@ public class CalendarController implements Initializable {
     }
 
 
-    //clear table
+    //clear event
     @FXML
     private void cleartable(ActionEvent event) throws IOException {
         loads.cleartableDB();
