@@ -1,23 +1,24 @@
+package controllers;
+
+import calender.AlertDaily;
+import calender.Calendar;
+import database.JdbcSQLiteConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import javafx.util.StringConverter;
 
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
-import java.util.function.Consumer;
 
 
 public class CalendarController implements Initializable {
@@ -27,34 +28,14 @@ public class CalendarController implements Initializable {
     @FXML
     private DatePicker datePicker;
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        datePicker.setConverter(new StringConverter<LocalDate>() {
-            @Override
-            public String toString(LocalDate t) {
-                if (t != null) {
-                    return formatter.format(t);
-                }
-                return null;
-            }
-
-            @Override
-            public LocalDate fromString(String string) {
-                if (string != null && !string.trim().isEmpty()) {
-                    return LocalDate.parse(string, formatter);
-                }
-                return null;
-            }
-        });
-
         datePicker.setOnAction((ActionEvent event) -> {
             LocalDate value = datePicker.getValue();
             array.add(String.valueOf(value));
             array.add(String.valueOf(value).substring(0, 4));
             array.add(String.valueOf(value).substring(5, 7));
             array.add(String.valueOf(value).substring(8, 10));
-
         });
 
         data = lists;
@@ -68,21 +49,21 @@ public class CalendarController implements Initializable {
     private Label notice;
 
     @FXML
-    public void handleSubmit(ActionEvent event) {
-        if (array.isEmpty()) {
+    public void handleSubmit(ActionEvent event) throws IOException {
+        if (array.isEmpty() && massage.getText().isEmpty()) {
             notice.setText("Please insert your information");
-        } else {
+        }
+        else if (!array.isEmpty() && massage.getText().isEmpty()){
+            notice.setText("Please add your event");
+        }
+        else if (array.isEmpty() && !massage.getText().isEmpty()){
+            notice.setText("Please choose your date");
+        }
+        else{
             AlertDaily daily = new AlertDaily();
             daily.submit(array, valuemenu, massage);
-            Button showdata = (Button) event.getSource();
-            Stage stage = (Stage) showdata.getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("calendar.fxml"));
-            try {
-                stage.setScene(new Scene(loader.load(), 900, 700));
-                stage.show();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            notice.setText("Your data is "+array.get(0)+" "+massage+" "+valuemenu);
+            this.goToCalendar(event);
             array.clear();
         }
     }
@@ -112,16 +93,15 @@ public class CalendarController implements Initializable {
         }
     }
 
-    @FXML
-    TableView<DBShow> tableView;
+
+    @FXML TableView<Calendar> tableView;
     JdbcSQLiteConnection loads = new JdbcSQLiteConnection();
-    ObservableList<DBShow> lists = loads.loadDB();
-    ObservableList<DBShow> data = FXCollections.observableArrayList();
-    @FXML
-    private TextField deleteID;
+    ObservableList<Calendar> lists = loads.loadDB();
+    ObservableList<Calendar> data = FXCollections.observableArrayList();
+    @FXML private TextField deleteID;
 
     @FXML
-    public void deleteData(ActionEvent event) {
+    public void deleteData(ActionEvent event) throws IOException {
         if (deleteID.getText().contains(",") || deleteID.getText().contains("-")) {
             String[] newdeleteId = new String[0];
             if (deleteID.getText().contains(",")) {
@@ -130,15 +110,7 @@ public class CalendarController implements Initializable {
                     int del = Integer.parseInt(i);
                     loads.deleteDB(del);
                 }
-                Button showdata = (Button) event.getSource();
-                Stage stage = (Stage) showdata.getScene().getWindow();
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("calendar.fxml"));
-                try {
-                    stage.setScene(new Scene(loader.load(), 900, 700));
-                    stage.show();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                this.goToCalendar(event);
             }
 //            else if (deleteID.getText().contains("-")){
 //                newdeleteId = deleteID.getText().split("-");
@@ -149,31 +121,27 @@ public class CalendarController implements Initializable {
         } else if (deleteID.getText().length() == 1) {
             int del = Integer.parseInt(deleteID.getText());
             loads.deleteDB(del);
-            Button showdata = (Button) event.getSource();
-            Stage stage = (Stage) showdata.getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("calendar.fxml"));
-            try {
-                stage.setScene(new Scene(loader.load(), 900, 700));
-                stage.show();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            this.goToCalendar(event);
         }
     }
+
 
     //clear table
     @FXML
-    private void cleartable(ActionEvent event) {
+    private void cleartable(ActionEvent event) throws IOException {
         loads.cleartableDB();
-        Button showdata = (Button) event.getSource();
-        Stage stage = (Stage) showdata.getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("calendar.fxml"));
-        try {
-            stage.setScene(new Scene(loader.load(), 900, 700));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        this.goToCalendar(event);
     }
 
+    //refresh calendar
+    public void goToCalendar(ActionEvent event) throws IOException{
+        Button showdata = (Button) event.getSource();
+        Stage stage = (Stage) showdata.getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../calendar.fxml"));
+        stage.setScene(new Scene(loader.load(), 900, 700));
+        stage.show();
+    }
+
+
+    
 }
