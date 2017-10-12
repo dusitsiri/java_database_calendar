@@ -11,6 +11,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.FlowPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -23,19 +25,14 @@ import java.util.ResourceBundle;
 
 public class CalendarController implements Initializable {
 
-    JdbcSQLiteConnection loads = new JdbcSQLiteConnection();
-    ObservableList<Calendar> lists = loads.loadDB();
-    ObservableList<Calendar> data = FXCollections.observableArrayList();
-
     ArrayList<String> array = new ArrayList<>();
     @FXML TableView<Calendar> tableView;
 
-
     //choose date of event
-    @FXML
-    private DatePicker datePicker;
+    @FXML private DatePicker datePicker;
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
         datePicker.setOnAction((ActionEvent event) -> {
             LocalDate value = datePicker.getValue();
             array.add(String.valueOf(value));
@@ -44,25 +41,24 @@ public class CalendarController implements Initializable {
             array.add(String.valueOf(value).substring(8, 10));
         });
 
-        data = lists;
-        tableView.setItems(data);
+        tableView.setItems(new HomePageController().lists);
     }
 
-    //Submit Button
+
     @FXML
     private TextField massage;
     @FXML
     private Label notice;
-
+    //Submit Button
     public void handleSubmit(ActionEvent event) throws IOException {
         if (array.isEmpty() && massage.getText().isEmpty()) {
-            notice.setText("Please insert your information");
+            notice.setText("Please insert your information.");
         }
         else if (!array.isEmpty() && massage.getText().isEmpty()){
-            notice.setText("Please add your event");
+            notice.setText("Please add your event.");
         }
         else if (array.isEmpty() && !massage.getText().isEmpty()){
-            notice.setText("Please choose your date");
+            notice.setText("Please choose your date.");
         }
         else{
             AlertDaily daily = new AlertDaily();
@@ -73,7 +69,7 @@ public class CalendarController implements Initializable {
         }
     }
 
-    //choose alert
+
     @FXML
     private MenuButton menuButton;
     @FXML
@@ -84,7 +80,7 @@ public class CalendarController implements Initializable {
     private MenuItem item3;
     @FXML
     private String valuemenu = "";
-
+    //choose alert
     public void menuList(ActionEvent event) {
         if (event.getTarget().equals(item1)) {
             valuemenu = item1.getText();
@@ -98,18 +94,21 @@ public class CalendarController implements Initializable {
         }
     }
 
+    @FXML private Button delete;
     //delete event
     public void deleteData(ActionEvent event) throws IOException {
-        if (tableView.getSelectionModel().getSelectedItem().getDate() != null){
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Do you want to delete " + tableView.getSelectionModel().getSelectedItem().getId() + "?",
+        if (event.getTarget().equals(delete) && tableView.getSelectionModel().getSelectedItem() == null){
+            notice.setText("Please choose data for delete.");
+        }
+        else if (tableView.getSelectionModel().getSelectedItem().getDate() != null){
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Do you want to delete event on " + tableView.getSelectionModel().getSelectedItem().getDate() + "?",
                     ButtonType.OK, ButtonType.CANCEL);
             Optional optional = alert.showAndWait();
             if (optional.get() == ButtonType.OK){
-                loads.deleteDB(tableView.getSelectionModel().getSelectedItem().getId());
+                new HomePageController().loads.deleteDB(tableView.getSelectionModel().getSelectedItem().getId());
                 this.handleGoToCalendar(event);
             }
         }
-
     }
 
     //clear event
@@ -119,9 +118,39 @@ public class CalendarController implements Initializable {
                 ButtonType.OK, ButtonType.CANCEL);
         Optional optional = alert.showAndWait();
         if (optional.get() == ButtonType.OK){
-            loads.cleartableDB();
+            new HomePageController().loads.cleartableDB();
         }
         this.handleGoToCalendar(event);
+    }
+
+    @FXML private Button edit;
+    Stage newStage = new Stage();
+    //edit event
+    public void handleEditEvent(){
+        if (tableView.getSelectionModel().getSelectedItem() != null){
+            Button buttonScene2 = new Button("Click to go back to First Scene");
+            Label labelScene2 = new Label("Scene 2");
+            FlowPane pane2 = new FlowPane();
+            buttonScene2.setOnAction(e-> ButtonClicked(e));
+            pane2.setVgap(10);
+            pane2.setStyle("-fx-background-color:tan;-fx-padding:10px;");
+            pane2.getChildren().addAll(buttonScene2, labelScene2);
+            Scene scene2 = new Scene(pane2, 400, 100);
+            newStage.setScene(scene2);
+            newStage.initModality(Modality.APPLICATION_MODAL);
+            newStage.setTitle("Edit your event");
+            newStage.show();
+        }
+    }
+
+    public void ButtonClicked(ActionEvent e)
+    {
+        if (e.getSource()==edit)
+            newStage.showAndWait();
+        else {
+            newStage.close();
+
+        }
     }
 
     //refresh calendar
@@ -134,10 +163,11 @@ public class CalendarController implements Initializable {
     }
 
 
-    public void handleSearchYourEvent(ActionEvent event) throws IOException{
+    //back to home page
+    public void handleHomePage(ActionEvent event) throws IOException{
         Button button = (Button) event.getSource();
         Stage stage = (Stage) button.getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("../allevents.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../homepage.fxml"));
         stage.setScene(new Scene(loader.load(), 1350, 850));
         stage.show();
     }

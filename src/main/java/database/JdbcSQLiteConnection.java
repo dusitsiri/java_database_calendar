@@ -11,7 +11,7 @@ import java.sql.*;
 public class JdbcSQLiteConnection {
 
 
-    public ObservableList loadDB(){
+    public static ObservableList loadDB(){
         ObservableList<Calendar> data = FXCollections.observableArrayList();
         try{
             //setup

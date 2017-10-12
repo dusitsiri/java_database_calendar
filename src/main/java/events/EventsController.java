@@ -18,7 +18,7 @@ public class EventsController {
     public void handleButtonBack(ActionEvent event) throws IOException {
         Button button = (Button) event.getSource();
         Stage stage = (Stage) button.getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("../allevents.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../calendar.fxml"));
         stage.setScene(new Scene(loader.load(), 1350, 850));
         stage.show();
     }
