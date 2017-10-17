@@ -15,14 +15,14 @@ import java.util.GregorianCalendar;
 
 public class HomePageController {
 
-    JdbcSQLiteConnection loads = new JdbcSQLiteConnection();
-    ObservableList<Calendar> lists = loads.loadDB();
+    static JdbcSQLiteConnection loads = new JdbcSQLiteConnection();
+    static ObservableList<Calendar> lists = loads.loadDB();
 
     public void handleButtonRecordEvents(ActionEvent event) throws IOException {
         Button button = (Button) event.getSource();
         Stage stage = (Stage) button.getScene().getWindow();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../calendar.fxml"));
-        stage.setScene(new Scene(loader.load(), 1350, 850));
+        stage.setScene(new Scene(loader.load(), 1300, 750));
         stage.show();
     }
 
@@ -30,8 +30,8 @@ public class HomePageController {
     public void handleButtonSearchEvent(ActionEvent event) throws IOException{
         Button button = (Button) event.getSource();
         Stage stage = (Stage) button.getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("../allevents.fxml"));
-        stage.setScene(new Scene(loader.load(), 1350, 850));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../events.fxml"));
+        stage.setScene(new Scene(loader.load(), 1300, 750));
         stage.show();
     }
 }

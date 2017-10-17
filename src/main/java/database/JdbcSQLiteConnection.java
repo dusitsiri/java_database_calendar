@@ -140,4 +140,37 @@ public class JdbcSQLiteConnection {
         return minID;
     }
 
+    public ObservableList searchEvent(String date){
+
+        ObservableList events = FXCollections.observableArrayList();
+        try{
+            //setup
+            Class.forName("org.sqlite.JDBC");
+            String dbURL = "jdbc:sqlite:bookstore.db";
+            Connection conn = DriverManager.getConnection(dbURL);
+            if(conn != null){
+                // display database information
+                DatabaseMetaData dm = (DatabaseMetaData) conn.getMetaData();
+                //execute SQL statements
+                String query = "select * from event";
+                Statement statement = conn.createStatement();
+                ResultSet resultSet = statement.executeQuery(query);
+                while (resultSet.next()){
+                    int id = resultSet.getInt(1);
+                    String dateInDatabase = resultSet.getString(2);
+                    String event = resultSet.getString(3);
+                    if (date.equals(dateInDatabase)){
+                       events.add(new Calendar(id, dateInDatabase, event));
+                   }
+                }
+                //close connection
+                conn.close();
+            }
+        }catch (ClassNotFoundException ex){
+            ex.printStackTrace();
+        }catch (SQLException ex){
+            ex.printStackTrace();
+        }
+        return events;
+    }
 }

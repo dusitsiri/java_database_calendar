@@ -6,10 +6,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane stylesheets="@calendar.css" prefHeight="850.0" prefWidth="1350.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.HomePageController">
+<AnchorPane prefHeight="750.0" prefWidth="1300.0" stylesheets="@calendar.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.HomePageController">
    <children>
-      <Button onAction="#handleButtonRecordEvents" layoutX="397.0" layoutY="586.0" mnemonicParsing="false" prefHeight="191.0" prefWidth="557.0" text="RECORD EVENTS" textAlignment="CENTER" textFill="#095d87">
+      <Button layoutX="397.0" layoutY="393.0" mnemonicParsing="false" onAction="#handleButtonRecordEvents" prefHeight="191.0" prefWidth="557.0" text="RECORD EVENTS" textAlignment="CENTER" textFill="#095d87">
          <font>
             <Font size="48.0" />
          </font>
@@ -25,7 +24,7 @@
             <DropShadow />
          </effect>
       </TextField>
-      <Button onAction="#handleButtonSearchEvent" layoutX="888.0" layoutY="256.0" mnemonicParsing="false" prefHeight="81.0" prefWidth="244.0" text="Search" textFill="#5757d7">
+      <Button layoutX="888.0" layoutY="256.0" mnemonicParsing="false" onAction="#handleButtonSearchEvent" prefHeight="81.0" prefWidth="244.0" text="Search" textFill="#5757d7">
          <font>
             <Font size="36.0" />
          </font>
