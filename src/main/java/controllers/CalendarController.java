@@ -144,9 +144,8 @@ public class CalendarController implements Initializable {
             newStage.close();
         }
     }
-
-    static ObservableList eventSearch = FXCollections.observableArrayList();
     @FXML private TextField searchTextField;
+    static ObservableList eventSearch = FXCollections.observableArrayList();
     public void handleSearchEvent(ActionEvent event) throws IOException{
         eventSearch = HomePageController.loads.searchEvent(searchTextField.getText());
         this.handleGotoSearchEvent(event);
