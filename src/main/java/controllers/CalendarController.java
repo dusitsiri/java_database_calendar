@@ -126,21 +126,20 @@ public class CalendarController implements Initializable {
         this.handleGotoSearchEvent(event);
     }
 
-    //refresh calendar
-    public void handleGoToCalendar(ActionEvent event) throws IOException {
-        Button button = (Button) event.getSource();
-        Stage stage = (Stage) button.getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("../calendar.fxml"));
-        stage.setScene(new Scene(loader.load(), 1300, 750));
-        stage.show();
-    }
-
-
     //back to home page
     public void handleHomePage(ActionEvent event) throws IOException {
         Button button = (Button) event.getSource();
         Stage stage = (Stage) button.getScene().getWindow();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../homepage.fxml"));
+        stage.setScene(new Scene(loader.load(), 1300, 750));
+        stage.show();
+    }
+
+    //refresh calendar
+    public void handleGoToCalendar(ActionEvent event) throws IOException {
+        Button button = (Button) event.getSource();
+        Stage stage = (Stage) button.getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../calendar.fxml"));
         stage.setScene(new Scene(loader.load(), 1300, 750));
         stage.show();
     }
