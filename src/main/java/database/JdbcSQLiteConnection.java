@@ -140,7 +140,7 @@ public class JdbcSQLiteConnection {
         return minID;
     }
 
-    public ObservableList searchEvent(String date){
+    public ObservableList searchEvent(String search){
 
         ObservableList events = FXCollections.observableArrayList();
         try{
@@ -158,9 +158,9 @@ public class JdbcSQLiteConnection {
                 while (resultSet.next()){
                     int id = resultSet.getInt(1);
                     String dateInDatabase = resultSet.getString(2);
-                    String event = resultSet.getString(3);
-                    if (date.equals(dateInDatabase)){
-                       events.add(new Calendar(id, dateInDatabase, event));
+                    String eventInDatabase = resultSet.getString(3);
+                    if (search.equals(dateInDatabase) || search.equals(eventInDatabase)){
+                       events.add(new Calendar(id, dateInDatabase, eventInDatabase));
                    }
                 }
                 //close connection

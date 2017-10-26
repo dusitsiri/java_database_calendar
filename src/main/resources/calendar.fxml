@@ -57,17 +57,17 @@
                         <DropShadow />
                     </effect>
                     <columns>
-                        <TableColumn prefWidth="68.0" text="ID">
+                        <TableColumn fx:id="id" prefWidth="68.0" text="ID">
                             <cellValueFactory>
                                 <PropertyValueFactory property="id" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn prefWidth="214.0" text="Date">
+                        <TableColumn fx:id="date" prefWidth="214.0" text="Date">
                             <cellValueFactory>
                                 <PropertyValueFactory property="date" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn prefWidth="458.0" text="Events">
+                        <TableColumn fx:id="events" prefWidth="458.0" text="Events">
                             <cellValueFactory>
                                 <PropertyValueFactory property="events" />
                             </cellValueFactory>
@@ -110,6 +110,9 @@
                </font>
             </Button>
             <SplitPane dividerPositions="0.5" layoutX="34.0" layoutY="26.0" prefHeight="33.0" prefWidth="1204.0">
+                <effect>
+                    <DropShadow/>
+                </effect>
                <items>
                   <TextField fx:id="searchTextField" prefHeight="31.0" prefWidth="676.0" promptText="search" />
                   <Button onAction="#handleSearchEvent" mnemonicParsing="false" prefHeight="31.0" prefWidth="210.0" text="Search" />

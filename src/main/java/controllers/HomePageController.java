@@ -16,7 +16,6 @@ import java.util.GregorianCalendar;
 public class HomePageController {
 
     static JdbcSQLiteConnection loads = new JdbcSQLiteConnection();
-    static ObservableList<Calendar> lists = loads.loadDB();
 
     public void handleButtonRecordEvents(ActionEvent event) throws IOException {
         Button button = (Button) event.getSource();

@@ -2,7 +2,8 @@ package controllers;
 
 import calender.AlertDaily;
 import calender.Calendar;
-import database.JdbcSQLiteConnection;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -11,8 +12,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.FlowPane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -28,11 +27,15 @@ public class CalendarController implements Initializable {
     ArrayList<String> array = new ArrayList<>();
     @FXML
     TableView<Calendar> tableView;
+    @FXML
+    private TableColumn id,date,events;
 
+    private IntegerProperty index = new SimpleIntegerProperty();
     //choose date of event
     @FXML
     private DatePicker datePicker;
 
+    ObservableList<Calendar> lists = HomePageController.loads.loadDB();
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
@@ -43,14 +46,14 @@ public class CalendarController implements Initializable {
             array.add(String.valueOf(value).substring(5, 7));
             array.add(String.valueOf(value).substring(8, 10));
         });
+        tableView.setItems(lists);
 
-        tableView.setItems(HomePageController.lists);
+
     }
 
 
     @FXML
     private TextField massage;
-
     //Submit Button
     public void handleSubmit(ActionEvent event) throws IOException {
         if (!array.isEmpty() && !massage.getText().isEmpty() && !valuemenu.equals("")) {
@@ -65,11 +68,7 @@ public class CalendarController implements Initializable {
     @FXML
     private MenuButton menuButton;
     @FXML
-    private MenuItem item1;
-    @FXML
-    private MenuItem item2;
-    @FXML
-    private MenuItem item3;
+    private MenuItem item1,item2,item3;
     @FXML
     private String valuemenu = "";
 
@@ -87,8 +86,6 @@ public class CalendarController implements Initializable {
         }
     }
 
-    @FXML
-    private Button delete;
 
     //delete event
     public void deleteData(ActionEvent event) throws IOException {
@@ -115,35 +112,13 @@ public class CalendarController implements Initializable {
         this.handleGoToCalendar(event);
     }
 
-    @FXML
-    private Button edit;
-    Stage newStage = new Stage();
+
 
     //edit event
     public void handleEditEvent() {
-        if (tableView.getSelectionModel().getSelectedItem() != null) {
-            Button buttonScene2 = new Button("Click to go back to First Scene");
-            Label labelScene2 = new Label("Scene 2");
-            FlowPane pane2 = new FlowPane();
-            buttonScene2.setOnAction(e -> ButtonClicked(e));
-            pane2.setVgap(10);
-            pane2.setStyle("-fx-background-color:tan;-fx-padding:10px;");
-            pane2.getChildren().addAll(buttonScene2, labelScene2);
-            Scene scene2 = new Scene(pane2, 400, 100);
-            newStage.setScene(scene2);
-            newStage.initModality(Modality.APPLICATION_MODAL);
-            newStage.setTitle("Edit your event");
-            newStage.show();
-        }
+
     }
 
-    public void ButtonClicked(ActionEvent e) {
-        if (e.getSource() == edit)
-            newStage.showAndWait();
-        else {
-            newStage.close();
-        }
-    }
     @FXML private TextField searchTextField;
     static ObservableList eventSearch = FXCollections.observableArrayList();
     public void handleSearchEvent(ActionEvent event) throws IOException{
